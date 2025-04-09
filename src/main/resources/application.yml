@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/customer-service/**
+
+        - id: currency-service
+          uri: lb://demo
+          predicates:
+            - Path=/demo/**
+
+
+
+
+#        - id: customer-service-swagger
+#          uri: http://localhost:8081
+#          predicates:
+#            - Path=/customer-service/v3/api-docs, /customer-service/swagger-ui/**
+#          filters:
+#            - StripPrefix=1
+
+#        - id: customer-service
+#          uri: lb://customer-service
+#          predicates:
+#            - Path=/api/customers/**
+#          filters:
+#            - RewritePath=/api/customers/(?<segment>.*), /customer-service/${segment}
+
+#        - id: system-service
+#          uri: lb://system-service
+#          predicates:
+#            - Path=/api/system/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.0.106.104:8761/eureka
